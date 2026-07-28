@@ -1,0 +1,624 @@
+import os
+from flask import Flask, render_template_string, send_from_directory
+
+app = Flask(__name__)
+
+STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+LOGO_FILE = os.path.join(STATIC_DIR, 'logo.png')
+DRAGON_FILE = os.path.join(STATIC_DIR, 'dragon.png')
+BANNER_FILE = os.path.join(STATIC_DIR, 'hero_banner.png')
+
+HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Axe — Digital Solutions</title>
+<link rel="icon" href="/static/logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    /* BRIGHTENED THEME: Lifted blacks to dark grays, boosted grays */
+    --bg: #0f0f12; 
+    --bg2: #17171c; 
+    --bg3: #1f1f26;
+    --white: #f5f5f7; 
+    --gray: #c0c0c8; 
+    --gray2: #9a9aa8; 
+    --gray3: #6e6e80;
+    --accent: #e8a020; 
+    --accent2: #d4911a; 
+    --accent-dim: rgba(232,160,32,0.12);
+    --red: #dc2626; 
+    --red-dim: rgba(220,38,38,0.1);
+    --border: rgba(255, 255, 255, 0.1); 
+    --border2: rgba(255, 255, 255, 0.18);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    /* Brighter, more diffused ambient glows */
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(220,38,38,0.08), transparent),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(232,160,32,0.06), transparent),
+      radial-gradient(ellipse 100% 80% at 50% 50%, rgba(60,50,90,0.1), transparent);
+    z-index: 0; pointer-events: none;
+  }
+
+  #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+  /* ========== NAV ========== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0 32px; height: 76px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    /* Brighter nav background */
+    background: rgba(15,15,18,0.85);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .nav-logo .brand-logo {
+    height: 44px; width: auto; object-fit: contain;
+    mix-blend-mode: screen;
+  }
+  .nav-logo .dragon-logo {
+    height: 38px; width: auto; object-fit: contain;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
+  }
+  .nav-logo .brand-text {
+    font-weight: 700; font-size: 22px;
+    letter-spacing: -0.04em; color: var(--white); line-height: 1;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--gray); text-decoration: none; font-size: 14px; font-weight: 400; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--accent); color: #080404;
+    padding: 10px 22px; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+    text-decoration: none; transition: all 0.2s; border: none; cursor: pointer;
+  }
+  .nav-cta:hover { background: #f0b040; transform: scale(1.03); }
+  .mobile-toggle { display: none; background: none; border: none; color: var(--white); cursor: pointer; }
+
+  section { position: relative; z-index: 2; }
+  .container { max-width: 1152px; margin: 0 auto; padding: 0 24px; }
+
+  /* ========== HERO ========== */
+  #hero {
+    padding-top: 76px; 
+    width: 100%;
+    position: relative;
+    background: var(--bg);
+  }
+  .hero-banner {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    line-height: 0;
+  }
+  .hero-banner img { width: 100%; height: auto; display: block; }
+
+  .hero-dragon {
+    position: absolute; top: 4%; right: 14%;
+    width: 16vw; max-width: 260px; min-width: 100px; height: auto;
+    object-fit: contain; z-index: 5;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 12px rgba(255,255,255,0.4)) drop-shadow(0 0 40px rgba(232,160,32,0.2));
+    animation: dragon-breathe 5s ease-in-out infinite;
+    opacity: 0.95;
+  }
+  @keyframes dragon-breathe {
+    0%, 100% { transform: scale(1) translateY(0); opacity: 0.95; }
+    50% { transform: scale(1.03) translateY(-5px); opacity: 1; }
+  }
+
+  .hero-banner::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 220px;
+    /* Gradient matches new brighter background */
+    background: linear-gradient(to top, var(--bg) 5%, transparent);
+    z-index: 4; pointer-events: none;
+  }
+
+  .hero-text-wrap {
+    position: relative; z-index: 5;
+    margin-top: -100px; padding-bottom: 100px;
+  }
+  .hero-text { max-width: 640px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 100px;
+    border: 1px solid var(--border2); background: var(--accent-dim);
+    font-size: 12px; font-weight: 500; color: var(--accent);
+    margin-bottom: 24px; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse-dot 2s infinite; }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .hero-text h1 {
+    font-size: clamp(40px, 5.5vw, 72px);
+    font-weight: 600; line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 24px;
+  }
+  .hero-text h1 .accent {
+    background: linear-gradient(135deg, var(--accent), #f5d070, var(--red));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  /* Brightened paragraph text */
+  .hero-text p { font-size: 17px; color: var(--gray); font-weight: 300; line-height: 1.7; max-width: 480px; margin-bottom: 36px; }
+  .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #080404;
+    padding: 14px 28px; border-radius: 10px;
+    font-size: 14px; font-weight: 600;
+    text-decoration: none; transition: all 0.25s; border: none; cursor: pointer;
+  }
+  .btn-primary:hover { background: #f0b040; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(232,160,32,0.25); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--white);
+    padding: 14px 28px; border-radius: 10px;
+    font-size: 14px; font-weight: 500;
+    text-decoration: none; transition: all 0.25s;
+    border: 1px solid var(--border2); cursor: pointer;
+  }
+  .btn-outline:hover { border-color: var(--gray3); background: rgba(255,255,255,0.05); }
+
+  /* ========== SECTIONS ========== */
+  .section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 500; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+  .section-label .line { width: 24px; height: 1px; background: var(--accent); }
+  .section-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px; }
+  .section-desc { font-size: 16px; color: var(--gray); font-weight: 300; max-width: 520px; line-height: 1.7; }
+
+  #services { padding: 120px 0; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 56px; }
+  .service-card {
+    padding: 32px 28px; border-radius: 16px;
+    /* Significantly brighter card background */
+    border: 1px solid var(--border); background: var(--bg2);
+    transition: all 0.35s; position: relative; overflow: hidden; cursor: default;
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0; transition: opacity 0.35s;
+  }
+  .service-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .service-card:hover::before { opacity: 1; }
+  .service-icon {
+    width: 48px; height: 48px; border-radius: 12px; background: var(--accent-dim);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; color: var(--accent); font-size: 22px; transition: all 0.3s;
+  }
+  .service-card:hover .service-icon { background: var(--accent); color: #080404; transform: scale(1.05); }
+  .service-card h3 { font-size: 17px; font-weight: 500; margin-bottom: 10px; letter-spacing: -0.01em; }
+  /* Brighter description text */
+  .service-card p { font-size: 14px; color: var(--gray2); font-weight: 300; line-height: 1.65; }
+  .service-tag { display: inline-block; margin-top: 16px; font-size: 11px; color: var(--gray3); font-weight: 400; letter-spacing: 0.02em; }
+
+  #about { padding: 120px 0; border-top: 1px solid var(--border); }
+  .about-content { max-width: 640px; margin-top: 56px; }
+  .about-content h3 { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .about-role { color: var(--accent); font-size: 14px; font-weight: 500; margin-bottom: 20px; }
+  /* Brighter bio text */
+  .about-content p { color: var(--gray); font-size: 15px; font-weight: 300; line-height: 1.75; margin-bottom: 16px; }
+  .stack-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .stack-tag {
+    padding: 6px 14px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--bg3);
+    font-size: 12px; font-weight: 500; color: var(--gray); transition: all 0.2s;
+  }
+  .stack-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ========== CONTACT (SIMPLIFIED DIRECT LINKS ONLY) ========== */
+  #contact {
+    padding: 100px 0; 
+    border-top: 1px solid var(--border);
+    /* Subtle background lift for the section */
+    background: linear-gradient(to bottom, var(--bg), var(--bg2));
+  }
+  .contact-center {
+    display: flex; flex-direction: column; align-items: center; text-align: center; gap: 40px; margin-top: 48px;
+  }
+  .contact-links { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+  .contact-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 18px 32px; border-radius: 14px;
+    font-size: 16px; font-weight: 500;
+    text-decoration: none; transition: all 0.3s; cursor: pointer;
+  }
+  .contact-btn-whatsapp {
+    background: #25D366; color: #ffffff; border: none;
+  }
+  .contact-btn-whatsapp:hover { background: #20bf5a; transform: translateY(-3px); box-shadow: 0 12px 40px rgba(37,211,102,0.3); }
+  .contact-btn-email {
+    background: transparent; color: var(--white); 
+    border: 1px solid var(--border2);
+  }
+  .contact-btn-email:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); background: rgba(232,160,32,0.05); }
+
+  footer { position: relative; z-index: 2; padding: 40px 0; border-top: 1px solid var(--border); background: var(--bg2); }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; }
+  .footer-copy { font-size: 13px; color: var(--gray3); font-weight: 300; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--gray3); font-size: 13px; text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.2s; }
+  .reveal-d3 { transition-delay: 0.3s; }
+
+  .mobile-menu {
+    position: fixed; top: 76px; left: 0; right: 0; bottom: 0; z-index: 99;
+    background: rgba(15,15,18,0.97); backdrop-filter: blur(20px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .mobile-menu.open { opacity: 1; pointer-events: auto; }
+  .mobile-menu a { color: var(--gray); text-decoration: none; font-size: 24px; font-weight: 500; transition: color 0.2s; }
+  .mobile-menu a:hover { color: var(--white); }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 1024px) {
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; height: 64px; }
+    #hero { padding-top: 64px; }
+    .nav-logo { gap: 6px; }
+    .nav-logo .brand-logo { height: 32px; }
+    .nav-logo .dragon-logo { height: 28px; }
+    .nav-logo .brand-text { font-size: 17px; }
+    .nav-links { display: none; }
+    .mobile-toggle { display: block; }
+    .mobile-menu { top: 64px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .hero-text h1 { font-size: 36px; }
+    .section-title { font-size: 28px; }
+    .hero-buttons { flex-direction: column; }
+    .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+    .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+    .hero-dragon { width: 28vw; right: 8%; top: 3%; }
+    .hero-text-wrap { margin-top: -60px; padding-bottom: 60px; }
+    .contact-links { flex-direction: column; align-items: center; width: 100%; }
+    .contact-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav>
+  <a href="#hero" class="nav-logo">
+    <img class="dragon-logo" src="/static/dragon.png" alt="" onerror="this.style.display='none'">
+    <img class="brand-logo" src="/static/logo.png" alt="Data Axe" onerror="this.style.display='none'">
+    <span class="brand-text">Data Axe</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="https://wa.me/923061346466" target="_blank" class="nav-cta">Get in Touch</a></li>
+  </ul>
+  <button class="mobile-toggle" onclick="toggleMenu()" aria-label="Menu">
+    <iconify-icon icon="lucide:menu" width="24"></iconify-icon>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+  <a href="https://wa.me/923061346466" target="_blank" onclick="toggleMenu()">WhatsApp</a>
+</div>
+
+<!-- ========== HERO ========== -->
+<section id="hero">
+  <div class="hero-banner reveal">
+    <img src="/static/hero_banner.png" alt="Data Axe Hero" onerror="this.parentElement.style.display='none'">
+    <img class="hero-dragon" src="/static/dragon.png" alt="Dragon" onerror="this.style.display='none'">
+  </div>
+  <div class="hero-text-wrap">
+    <div class="container">
+      <div class="hero-text">
+        <div class="hero-badge reveal reveal-d1"><span class="dot"></span> Digital Solutions Studio</div>
+        <h1 class="reveal reveal-d2">Building the<br><span class="accent">future of tech</span></h1>
+        <p class="reveal reveal-d3">From QR systems and rider apps to custom games and OSINT — we craft powerful digital products that solve real problems.</p>
+        <div class="hero-buttons reveal">
+          <a href="#services" class="btn-primary">
+            Explore Services
+            <iconify-icon icon="lucide:arrow-down-right" width="16"></iconify-icon>
+          </a>
+          <a href="https://wa.me/923061346466" target="_blank" class="btn-outline">
+            <iconify-icon icon="mdi:whatsapp" width="18"></iconify-icon>
+            Chat on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SERVICES ========== -->
+<section id="services">
+  <div class="container">
+    <div class="section-label reveal"><span class="line"></span> What We Do</div>
+    <h2 class="section-title reveal reveal-d1">Our Services</h2>
+    <p class="section-desc reveal reveal-d2">End-to-end digital solutions engineered for performance, reliability, and impact.</p>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon"><iconify-icon icon="lucide:qr-code"></iconify-icon></div>
+        <h3>Emergency QR</h3>
+        <p>Instant-access QR systems for emergency contacts, medical info, and critical response workflows.</p>
+        <span class="service-tag">Safety &middot; Healthcare</span>
+      </div>
+      <div class="service-card reveal reveal-d1">
+        <div class="service-icon"><iconify-icon icon="lucide:utensils"></iconify-icon></div>
+        <h3>Restaurant QR & Inventory</h3>
+        <p>Digital menus with QR ordering paired with real-time inventory tracking and analytics dashboards.</p>
+        <span class="service-tag">F&B &middot; Management</span>
+      </div>
+      <div class="service-card reveal reveal-d2">
+        <div class="service-icon"><iconify-icon icon="lucide:bike"></iconify-icon></div>
+        <h3>Rider Apps</h3>
+        <p>Full-featured delivery and logistics apps with live tracking, route optimization, and earnings management.</p>
+        <span class="service-tag">Logistics &middot; Mobility</span>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><iconify-icon icon="lucide:target"></iconify-icon></div>
+        <h3>Sales Close Apps</h3>
+        <p>CRM-powered closing tools with pipeline tracking, follow-up automation, and conversion analytics.</p>
+        <span class="service-tag">Sales &middot; CRM</span>
+      </div>
+      <div class="service-card reveal reveal-d1">
+        <div class="service-icon"><iconify-icon icon="lucide:shield-check"></iconify-icon></div>
+        <h3>Mobile Camera Security</h3>
+        <p>Turn any phone into a smart security camera with motion detection, cloud storage, and live feeds.</p>
+        <span class="service-tag">Security &middot; IoT</span>
+      </div>
+      <div class="service-card reveal reveal-d2">
+        <div class="service-icon"><iconify-icon icon="lucide:wifi"></iconify-icon></div>
+        <h3>WiFi IoT Device Control</h3>
+        <p>Centralized control panels for WiFi-connected smart devices — lights, locks, appliances, and sensors.</p>
+        <span class="service-tag">Smart Home &middot; IoT</span>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><iconify-icon icon="lucide:gamepad-2"></iconify-icon></div>
+        <h3>Custom Video Games</h3>
+        <p>Bespoke game development from arcade-style casual games to tactical/strategic experiences.</p>
+        <span class="service-tag">Gaming &middot; Entertainment</span>
+      </div>
+      <div class="service-card reveal reveal-d1">
+        <div class="service-icon"><iconify-icon icon="lucide:search"></iconify-icon></div>
+        <h3>OSINT Solutions</h3>
+        <p>Open-source intelligence tools for data gathering, analysis, reconnaissance, and investigative workflows.</p>
+        <span class="service-tag">Intelligence &middot; Research</span>
+      </div>
+      <div class="service-card reveal reveal-d2">
+        <div class="service-icon"><iconify-icon icon="lucide:code-2"></iconify-icon></div>
+        <h3>Custom Development</h3>
+        <p>Need something unique? We build tailored software solutions from concept to deployment.</p>
+        <span class="service-tag">Full-Stack &middot; Custom</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ABOUT ========== -->
+<section id="about">
+  <div class="container">
+    <div class="section-label reveal"><span class="line"></span> Who We Are</div>
+    <h2 class="section-title reveal reveal-d1">Meet the Founder</h2>
+    <div class="about-content reveal reveal-d2">
+      <h3>Ali Ahsan</h3>
+      <div class="about-role">Founder & Lead Developer — Data Axe</div>
+      <p>A passionate builder at the intersection of software engineering and creative problem-solving. Ali founded Data Axe to deliver high-impact digital products — from real-time systems to immersive experiences.</p>
+      <p>Every project is approached with precision, clean architecture, and a relentless focus on user experience.</p>
+      <div class="stack-tags">
+        <span class="stack-tag">HTML5</span>
+        <span class="stack-tag">JavaScript</span>
+        <span class="stack-tag">CSS3</span>
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">Flask</span>
+        <span class="stack-tag">React</span>
+        <span class="stack-tag">Node.js</span>
+        <span class="stack-tag">IoT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT (Direct Links Only) ========== -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label reveal"><span class="line"></span> Get in Touch</div>
+    <h2 class="section-title reveal reveal-d1">Let's Build Something</h2>
+    <div class="contact-center reveal reveal-d2">
+      <p class="section-desc" style="max-width: 600px; margin: 0 auto;">Have a project in mind? Reach out directly — we respond fast.</p>
+      <div class="contact-links">
+        <a href="https://wa.me/923061346466" target="_blank" class="contact-btn contact-btn-whatsapp">
+          <iconify-icon icon="mdi:whatsapp" width="22"></iconify-icon>
+          Chat on WhatsApp
+        </a>
+        <a href="mailto:cybershadow854@gmail.com" class="contact-btn contact-btn-email">
+          <iconify-icon icon="lucide:mail" width="20"></iconify-icon>
+          Send an Email
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-copy">&copy; 2025 Data Axe. All rights reserved.</span>
+      <div class="footer-links">
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="https://wa.me/923061346466" target="_blank">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mouse = { x: null, y: null };
+
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+
+const COLORS = [
+  { r: 232, g: 160, b: 32 },
+  { r: 245, g: 200, b: 80 },
+  { r: 220, g: 60, b: 40 },
+  { r: 200, g: 40, b: 30 },
+  { r: 255, g: 220, b: 120 },
+];
+
+class Particle {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x = Math.random() * canvas.width;
+    this.y = init ? Math.random() * canvas.height : -10;
+    this.size = Math.random() * 2 + 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.35;
+    this.speedY = Math.random() * 0.25 + 0.05;
+    const c = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.color = c;
+    this.opacity = Math.random() * 0.5 + 0.15;
+    this.pulseSpeed = Math.random() * 0.02 + 0.005;
+    this.pulseOffset = Math.random() * Math.PI * 2;
+  }
+  update(time) {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (mouse.x !== null) {
+      const dx = this.x - mouse.x, dy = this.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 140) {
+        const force = (140 - dist) / 140 * 0.02;
+        this.x += dx * force;
+        this.y += dy * force;
+      }
+    }
+    this.currentOpacity = this.opacity * (0.6 + 0.4 * Math.sin(time * this.pulseSpeed + this.pulseOffset));
+    if (this.x < -20 || this.x > canvas.width + 20 || this.y < -20 || this.y > canvas.height + 20) this.reset(false);
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color.r},${this.color.g},${this.color.b},${this.currentOpacity})`;
+    ctx.fill();
+  }
+}
+
+const count = Math.min(Math.floor(window.innerWidth * 0.1), 120);
+for (let i = 0; i < count; i++) particles.push(new Particle());
+
+function connectParticles() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = dx * dx + dy * dy;
+      if (dist < 10000) {
+        const opacity = (1 - dist / 10000) * 0.1;
+        const ci = particles[i].color;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(${ci.r},${ci.g},${ci.b},${opacity})`;
+        ctx.lineWidth = 0.4;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+let time = 0;
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  time++;
+  particles.forEach(p => { p.update(time); p.draw(); });
+  connectParticles();
+  requestAnimationFrame(animate);
+}
+animate();
+
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.background = window.scrollY > 50 ? 'rgba(15,15,18,0.95)' : 'rgba(15,15,18,0.85)';
+});
+</script>
+
+</body>
+</html>
+"""
+
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(STATIC_DIR, filename)
+
+
+@app.route('/')
+def index():
+    return render_template_string(HTML)
+
+
+if __name__ == '__main__':
+    os.makedirs(STATIC_DIR, exist_ok=True)
+
+    missing = []
+    if not os.path.exists(LOGO_FILE):
+        missing.append("  logo.png          — Data Axe brand logo")
+    if not os.path.exists(DRAGON_FILE):
+        missing.append("  dragon.png        — Kali Linux dragon logo")
+    if not os.path.exists(BANNER_FILE):
+        missing.append("  hero_banner.png   — Cyberpunk hero scene")
+
+    if missing:
+        print("\n" + "=" * 64)
+        print("  PLACE THESE FILES IN YOUR static/ FOLDER:")
+        print("=" * 64)
+        for m in missing:
+            print(m)
+        print("=" * 64 + "\n")
+    else:
+        print("\n✅ All 3 static assets found. Launching...\n")
+
+    app.run(debug=True, port=5000)
