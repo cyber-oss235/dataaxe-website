@@ -1,14 +1,3 @@
-import os
-from flask import Flask, render_template_string, send_from_directory
-
-app = Flask(__name__)
-
-STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
-LOGO_FILE = os.path.join(STATIC_DIR, 'logo.png')
-DRAGON_FILE = os.path.join(STATIC_DIR, 'dragon.png')
-BANNER_FILE = os.path.join(STATIC_DIR, 'hero_banner.png')
-
-HTML = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -587,38 +576,3 @@ window.addEventListener('scroll', () => {
 
 </body>
 </html>
-"""
-
-
-@app.route('/static/<path:filename>')
-def serve_static(filename):
-    return send_from_directory(STATIC_DIR, filename)
-
-
-@app.route('/')
-def index():
-    return render_template_string(HTML)
-
-
-if __name__ == '__main__':
-    os.makedirs(STATIC_DIR, exist_ok=True)
-
-    missing = []
-    if not os.path.exists(LOGO_FILE):
-        missing.append("  logo.png          — Data Axe brand logo")
-    if not os.path.exists(DRAGON_FILE):
-        missing.append("  dragon.png        — Kali Linux dragon logo")
-    if not os.path.exists(BANNER_FILE):
-        missing.append("  hero_banner.png   — Cyberpunk hero scene")
-
-    if missing:
-        print("\n" + "=" * 64)
-        print("  PLACE THESE FILES IN YOUR static/ FOLDER:")
-        print("=" * 64)
-        for m in missing:
-            print(m)
-        print("=" * 64 + "\n")
-    else:
-        print("\n✅ All 3 static assets found. Launching...\n")
-
-    app.run(debug=True, port=5000)
