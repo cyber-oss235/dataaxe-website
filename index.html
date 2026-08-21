@@ -1,343 +1,612 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Data Axe — Digital Solutions</title>
-  <meta property="og:title" content="Data Axe — Digital Solutions">
-  <meta property="og:description" content="Explore our digital solutions, custom systems, and tech services.">
-  <meta property="og:image" content="https://www.dataaxe.info/static/hero_banner.png">
-  <meta property="og:url" content="https://www.dataaxe.info/">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="/static/logo.png" type="image/png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
-  <style>
-    /* Reset & root */
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#071226; --bg-2:#0b1a2b; --card:#0f2638;
-      --muted:#9fb0c4; --text:#eaf3fb; --accent:#1fb6ff; --accent-2:#0ea5d8;
-      --glass:rgba(255,255,255,0.03); --border:rgba(255,255,255,0.06);
-      --radius:12px;
-      --max-width:1152px;
-    }
-    html,body{height:100%}
-    html{scroll-behavior:smooth}
-    body{
-      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      background:linear-gradient(180deg,var(--bg),#041020);
-      color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.6;
-      overflow-x:hidden;
-    }
+<!DOCTYPE HTML>
+<!--
+	DATA AXE
+-->
+<html>
+	<head>
+		<title>DATA AXE</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript><link rel="stylesheet" href="assets/css/main.css" />
+<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 
-    /* Layout */
-    .container{max-width:var(--max-width);margin:0 auto;padding:0 24px}
-    nav{
-      position:fixed;inset:0 0 auto 0;height:72px;display:flex;align-items:center;justify-content:space-between;
-      padding:12px 28px;background:linear-gradient(180deg,rgba(7,18,38,0.55),rgba(7,18,38,0.42));
-      border-bottom:1px solid var(--border);z-index:120;backdrop-filter:blur(8px)
-    }
-    .nav-left{display:flex;align-items:center;gap:12px}
-    .brand-logo{height:36px;display:block}
-    .brand-text{font-weight:700;font-size:18px;color:var(--text)}
-    .nav-links{display:flex;gap:22px;list-style:none;align-items:center}
-    .nav-links a{color:var(--muted);text-decoration:none;font-weight:600;font-size:14px}
-    .nav-links a:hover{color:var(--text)}
-    .nav-cta{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#041428;padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:700}
+<style>
+.card {
+  width: 90%;
+  max-width: 350px;
+  min-height: 250px;
+  background: #07182E !important;
+  position: relative;
+  display: flex;
+  place-content: center;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 30px auto;
+  box-sizing: border-box;
+}
 
-    /* Hero */
-    #hero{padding-top:92px;padding-bottom:56px}
-    .hero-inner{display:grid;grid-template-columns:1fr 420px;gap:36px;align-items:center}
-    .hero-left{}
-    .hero-badge{display:inline-flex;align-items:center;gap:10px;padding:6px 14px;border-radius:999px;background:rgba(31,182,255,0.06);color:var(--accent);font-weight:700;font-size:12px;margin-bottom:18px;border:1px solid rgba(31,182,255,0.06)}
-    .hero-h1{font-size: clamp(36px,5.2vw,56px);line-height:1;font-weight:800;margin-bottom:16px;color:var(--text)}
-    .hero-h1 .accent{background:linear-gradient(90deg,var(--accent),#9be9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .hero-p{color:var(--muted);max-width:640px;margin-bottom:22px;font-weight:300}
-    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:700;cursor:pointer}
-    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#041428}
-    .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.card-content {
+  z-index: 2;
+  color: white;
+  text-align: center;
+}
 
-    .hero-figure{border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(2,8,20,0.6)}
-    .hero-figure img{display:block;width:100%;height:auto;filter:contrast(.98) saturate(.96)}
+.card-content h2 {
+  color: #00b7ff;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
 
-    /* New Services Template: feature list with icon, title, bullets and CTA */
-    #services{padding:80px 0;border-top:1px solid var(--border)}
-    .services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;align-items:start}
-    .svc-card{background:linear-gradient(180deg,var(--card), rgba(255,255,255,0.01));border:1px solid var(--border);padding:22px;border-radius:12px;display:flex;gap:18px;transition:transform .22s}
-    .svc-card:hover{transform:translateY(-6px);box-shadow:0 18px 50px rgba(3,9,22,0.5)}
-    .svc-icon{width:56px;height:56px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:22px}
-    .svc-body{flex:1}
-    .svc-title{font-size:18px;font-weight:700;margin-bottom:8px}
-    .svc-desc{color:var(--muted);font-weight:300;margin-bottom:12px}
-    .svc-list{list-style:none;padding-left:0;margin:0 0 12px 0;display:grid;gap:6px}
-    .svc-list li{color:var(--muted);font-size:14px;display:flex;gap:8px;align-items:flex-start}
-    .svc-list li::before{content:'\2022';color:var(--accent);font-weight:700;margin-right:6px;transform:translateY(-1px)}
-    .svc-cta{display:inline-block;padding:8px 14px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text);text-decoration:none;font-weight:700}
+.card-content p {
+  color: #e0e0e0;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
 
-    /* Testimonials / Reviews */
-    #testimonials{padding:72px 0;border-top:1px solid var(--border);background:linear-gradient(180deg,transparent,rgba(255,255,255,0.01))}
-    .test-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
-    .reviews-note{font-size:13px;color:var(--muted);font-weight:500}
-    .review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:12px}
-    .review-card{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid var(--border);padding:18px;border-radius:12px}
-    .stars{color:#FFD166;font-size:14px;margin-bottom:8px}
-    .review-text{color:var(--muted);font-size:14px;margin-bottom:12px}
-    .review-meta{font-weight:700;color:var(--text);font-size:13px}
-    .review-location{font-size:12px;color:var(--muted);font-weight:600}
+.card::before {
+  content: '';
+  position: absolute;
+  width: 150px;
+  background-image: linear-gradient(180deg, rgb(0, 183, 255), rgb(255, 48, 255));
+  height: 180%;
+  animation: rotBGimg 3s linear infinite;
+}
 
-    /* Footer */
-    footer{padding:28px 0;border-top:1px solid var(--border);background:var(--bg-2)}
-    .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .footer-copy{color:rgba(255,255,255,0.6);font-size:13px}
-    .footer-links{display:flex;gap:18px}
-    .footer-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px}
-    .footer-links a:hover{color:var(--text)}
+@keyframes rotBGimg {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
-    /* Responsive */
-    @media (max-width:1024px){.review-grid{grid-template-columns:repeat(2,1fr)}.services-grid{grid-template-columns:1fr}}
-    @media (max-width:768px){
-      .hero-inner{grid-template-columns:1fr;gap:22px}
-      .hero-figure{order:-1}
-      .review-grid{grid-template-columns:1fr}
-      .nav-links{display:none}
-    }
+.card::after {
+  content: '';
+  position: absolute;
+  background: #07182E;
+  inset: 4px;
+  border-radius: 16px;
+}
 
-    /* Reveal */
-    .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
-    .reveal.visible{opacity:1;transform:none}
-  </style>
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #1f2833;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.5);
+  border-radius: 5px;
+  z-index: 999;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.show {
+  display: block !important;
+}
+
+.btn-dev {
+  width: 180px;
+  height: 50px;
+  background: linear-gradient(to top, #00154c, #12376e, #23487f);
+  color: #fff !important;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  display: inline-block;
+  text-decoration: none !important;
+  text-align: center;
+  line-height: normal;
+}
+
+.btn-dev span {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: top 0.5s;
+}
+
+.btn-text-one {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.btn-text-two {
+  position: absolute;
+  width: 100%;
+  top: 150%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.btn-dev:hover .btn-text-one {
+  top: -100%;
+}
+
+.btn-dev:hover .btn-text-two {
+  top: 50%;
+}
+summary {
+  list-style: none !important;
+}
+summary::-webkit-details-marker {
+  display: none !important;
+}
+/* Animated Social Icons with Tooltip */
+.social-wrapper {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 20px auto !important;
+  padding: 0 !important;
+  padding-left: 0 !important;
+  list-style: none !important;
+  box-sizing: border-box !important;
+}
+
+.social-wrapper .icon {
+  position: relative;
+  background: #ffffff;
+  border-radius: 50%;
+  margin: 0 8px !important; /* فاصلہ برابر کرنے کے لیے */
+  width: 50px;
+  height: 50px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+
+.social-wrapper .icon {
+  position: relative;
+  background: #ffffff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.social-wrapper .tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 13px;
+  background: #ffffff;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.social-wrapper .tooltip::before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  background: #ffffff;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.social-wrapper .icon:hover .tooltip {
+  top: -45px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Colors on Hover */
+.social-wrapper .location:hover,
+.social-wrapper .location:hover .tooltip,
+.social-wrapper .location:hover .tooltip:before {
+  background: #ff5e36;
+  color: #fff;
+}
+
+.social-wrapper .phone:hover,
+.social-wrapper .phone:hover .tooltip,
+.social-wrapper .phone:hover .tooltip:before {
+  background: #25d366;
+  color: #fff;
+}
+
+.social-wrapper .gmail:hover,
+.social-wrapper .gmail:hover .tooltip,
+.social-wrapper .gmail:hover .tooltip:before {
+  background: #ea4335;
+  color: #fff;
+}
+
+.social-wrapper .icon svg {
+  fill: #333;
+  transition: fill 0.2s ease;
+}
+
+.social-wrapper .icon:hover svg {
+  fill: #fff;
+}
+/* Animated Contact Card */
+.contact-card {
+  --dark: #212121;
+  --darker: #111111;
+  --semidark: #2c2c2c;
+  --lightgray: #e8e8e8;
+  --unit: 10px;
+
+  background-color: var(--darker);
+  box-shadow: 0 0 var(--unit) var(--darker);
+  border: calc(var(--unit) / 2) solid var(--darker);
+  border-radius: var(--unit);
+  position: relative;
+  padding: var(--unit);
+  overflow: hidden;
+  max-width: 320px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.contact-card::before {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 20%;
+  top: 40%;
+  left: -10%;
+  background: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  animation: keyframes-floating-light 2.5s infinite ease-in-out;
+  filter: blur(20px);
+}
+
+@keyframes keyframes-floating-light {
+  0%, 100% { transform: rotate(-5deg) translateY(-5%); opacity: 0.5; }
+  50% { transform: rotate(5deg) translateY(5%); opacity: 1; }
+}
+
+.contact-card::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0%;
+  left: 0%;
+  background: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  filter: blur(20px);
+  pointer-events: none;
+  animation: keyframes-intro 1s ease-in forwards;
+}
+
+@keyframes keyframes-intro {
+  100% { transform: translate(-100%); opacity: 0; }
+}
+
+.contact-card .image {
+  width: 160px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  animation: keyframes-floating-img 10s ease-in-out infinite;
+}
+
+@keyframes keyframes-floating-img {
+  0%, 100% { transform: translate(-2%, 2%) scaleY(0.95) rotate(-5deg); }
+  50% { transform: translate(2%, -2%) scaleY(1) rotate(5deg); }
+}
+
+.contact-card .heading {
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  margin-top: calc(var(--unit) * -1);
+  padding-block: var(--unit);
+  color: var(--lightgray);
+  animation: keyframes-flash-text 1.5s infinite;
+}
+
+@keyframes keyframes-flash-text {
+  50% { opacity: 0.5; }
+}
+
+.contact-card .icons {
+  display: flex;
+  gap: var(--unit);
+  position: relative;
+  z-index: 2;
+}
+
+.contact-card .icons a {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--dark);
+  color: var(--lightgray);
+  padding: 10px;
+  border-radius: calc(var(--unit) / 2);
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.contact-card .icons a:hover {
+  background-color: #5b42f3;
+  color: #fff;
+}
+
+.address-popup {
+  display: none; /* شروع میں غائب */
+  background: #5b42f3;
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  animation: fadeIn 0.3s;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+
+</style>
+
 </head>
-<body>
 
-  <canvas id="particles" aria-hidden="true" style="position:fixed;inset:0;z-index:1;pointer-events:none"></canvas>
+	</head>
+		<body class="is-preload">
 
-  <nav>
-    <div class="nav-left">
-      <a href="#hero" style="display:flex;align-items:center;gap:10px;text-decoration:none">
-        <img class="brand-logo" src="/static/logo.png" alt="Data Axe logo" onerror="this.style.display='none'">
-        <span class="brand-text">Data Axe</span>
-      </a>
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+<!-- Header -->
+<header id="header" class="alt">
+    <h1><a href="index.html">Data Axe</a></h1>
+ <details style="position: relative; display: inline-block;">
+    <summary style="font-size: 24px; cursor: pointer;"></summary>
+    <div style="position: absolute; right: 0; background: #07182E; padding: 10px; border-radius: 8px;">
+        <a href="index.html" style="display: block; color: white;">HOME</a>
+        <a href="#about" style="display: block; color: white;">ABOUT DATA AXE</a>
     </div>
+</details>
+</nav>
 
-    <ul class="nav-links" role="navigation" aria-label="Primary">
-      <li><a href="#services">Services</a></li>
-      <li><a href="#testimonials">Reviews</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact" class="nav-cta">Contact</a></li>
-    </ul>
-  </nav>
+</header>
 
-  <main class="container" style="position:relative;z-index:5">
-    <!-- HERO -->
-    <section id="hero" class="reveal">
-      <div class="hero-inner">
-        <div class="hero-left">
-          <div class="hero-badge">Digital Solutions Studio</div>
-          <h1 class="hero-h1">Building the<br><span class="accent">future of tech</span></h1>
-          <p class="hero-p">From QR systems and rider apps to custom games and OSINT — we craft powerful digital products that solve real problems with reliability, clean architecture, and a user-first approach.</p>
-          <div class="hero-ctas">
-            <a href="#services" class="btn btn-primary">Explore Services</a>
-            <a href="mailto:dataaxeinfo@gmail.com" class="btn btn-ghost">Email Us</a>
-          </div>
-        </div>
-
-        <div class="hero-figure" aria-hidden="true">
-          <img src="/static/hero_banner.png" alt="Hero banner — Data Axe digital solutions" onerror="this.parentElement.style.display='none'">
-        </div>
-      </div>
-    </section>
-
-    <!-- SERVICES (new template) -->
-    <section id="services" class="reveal">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px">
-        <div>
-          <div style="color:var(--accent);font-weight:700;font-size:13px;margin-bottom:6px">What We Do</div>
-          <h2 style="font-size:28px;margin-bottom:6px">Professional Services</h2>
-          <p style="color:var(--muted);max-width:680px">End-to-end engineering and product design: scalable systems, mobile-first apps, and IoT integrations tailored for performance and security.</p>
-        </div>
-      </div>
-
-      <div class="services-grid" role="list">
-        <article class="svc-card" role="listitem">
-          <div class="svc-icon" aria-hidden="true"><iconify-icon icon="lucide:qr-code" width="22"></iconify-icon></div>
-          <div class="svc-body">
-            <div class="svc-title">Emergency QR Systems</div>
-            <div class="svc-desc">Fast-access QR profiles with encrypted medical and contact data for first responders and institutional deployments.</div>
-            <ul class="svc-list">
-              <li>Secure, auditable records</li>
-              <li>Offline-friendly QR readers</li>
-              <li>Admin dashboard & analytics</li>
-            </ul>
-            <a class="svc-cta" href="mailto:dataaxeinfo@gmail.com">Request a Quote</a>
-          </div>
-        </article>
-
-        <article class="svc-card" role="listitem">
-          <div class="svc-icon" aria-hidden="true"><iconify-icon icon="lucide:utensils" width="22"></iconify-icon></div>
-          <div class="svc-body">
-            <div class="svc-title">Restaurant QR & Inventory</div>
-            <div class="svc-desc">Digital menus, ordering, and inventory sync — built for speed, reliability, and easy staff workflows.</div>
-            <ul class="svc-list">
-              <li>Menu & order automation</li>
-              <li>Inventory and wastage tracking</li>
-              <li>POS & analytics integrations</li>
-            </ul>
-            <a class="svc-cta" href="mailto:dataaxeinfo@gmail.com">Talk to Sales</a>
-          </div>
-        </article>
-
-        <article class="svc-card" role="listitem">
-          <div class="svc-icon" aria-hidden="true"><iconify-icon icon="lucide:bike" width="22"></iconify-icon></div>
-          <div class="svc-body">
-            <div class="svc-title">Rider & Logistics Apps</div>
-            <div class="svc-desc">Real-time tracking, earnings management, and route optimization for delivery platforms and fleets.</div>
-            <ul class="svc-list">
-              <li>Live tracking & ETA</li>
-              <li>Route optimization</li>
-              <li>Driver wallets & payouts</li>
-            </ul>
-            <a class="svc-cta" href="mailto:dataaxeinfo@gmail.com">Get Started</a>
-          </div>
-        </article>
-
-        <article class="svc-card" role="listitem">
-          <div class="svc-icon" aria-hidden="true"><iconify-icon icon="lucide:shield-check" width="22"></iconify-icon></div>
-          <div class="svc-body">
-            <div class="svc-title">Mobile Camera Security</div>
-            <div class="svc-desc">Turn smartphones into smart cameras with motion detection, secure storage, and remote access controls.</div>
-            <ul class="svc-list">
-              <li>Motion & event recording</li>
-              <li>Encrypted cloud retention</li>
-              <li>Multi-device management</li>
-            </ul>
-            <a class="svc-cta" href="mailto:dataaxeinfo@gmail.com">Learn More</a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- TESTIMONIALS / REVIEWS (CLEARLY MARKED AS DEMO) -->
-    <section id="testimonials" class="reveal">
-      <div class="test-header">
-        <div>
-          <div style="color:var(--accent);font-weight:700;font-size:13px">Reviews</div>
-          <h2 style="margin-top:6px">What clients say</h2>
-        </div>
-        <div style="text-align:right">
-          <div class="reviews-note"></div>
-        </div>
-      </div>
-
-      <div class="review-grid" role="list">
-        <article class="review-card" role="listitem">
-          <div class="stars" aria-hidden="true">★★★★★</div>
-          <div class="review-text">"Great experience. The delivery app integration saved us time and improved delivery accuracy. Professional team and fast turnaround."</div>
-          <div class="review-meta">Aisha Khan <span class="review-location">— Lahore, PK</span></div>
-        </article>
-
-        <article class="review-card" role="listitem">
-          <div class="stars" aria-hidden="true">★★★★★</div>
-          <div class="review-text">"Emergency QR system is reliable and simple — it has become part of our clinic intake workflow."</div>
-          <div class="review-meta">Bilal Ahmed <span class="review-location">— Karachi, PK</span></div>
-        </article>
-
-        <article class="review-card" role="listitem">
-          <div class="stars" aria-hidden="true">★★★★☆</div>
-          <div class="review-text">"Clean UI, fast support and measurable improvements in our inventory losses. Recommended for restaurants."</div>
-          <div class="review-meta">Sana Riaz <span class="review-location">— Islamabad, PK</span></div>
-        </article>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="reveal" style="padding-top:48px;padding-bottom:24px;border-top:1px solid var(--border)">
-      <div style="display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap">
-        <div style="flex:1;min-width:280px">
-          <div style="color:var(--accent);font-weight:700;font-size:13px;margin-bottom:8px">Who We Are</div>
-          <h2 style="margin-bottom:8px">Meet the Founder</h2>
-          <h3 style="margin-bottom:6px">Ali Ahsan</h3>
-          <div style="color:var(--accent);font-weight:700;margin-bottom:10px">Founder & Lead Developer — Data Axe</div>
-          <p style="color:var(--muted);max-width:720px;margin-bottom:12px">A passionate builder at the intersection of software engineering and creative problem-solving. Ali founded Data Axe to deliver high-impact digital products — from real-time systems to immersive experiences.</p>
-          <p style="color:var(--muted);max-width:720px">Every project is approached with precision, clean architecture, and a relentless focus on user experience.</p>
-        </div>
-
-        <div style="width:320px;min-width:240px">
-          <div style="background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid var(--border);padding:14px;border-radius:12px">
-            <div style="font-weight:700;margin-bottom:8px">Tech & Tools</div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px">
-              <span style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);color:var(--muted);font-weight:600">HTML5</span>
-              <span style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);color:var(--muted);font-weight:600">JavaScript</span>
-              <span style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);color:var(--muted);font-weight:600">CSS3</span>
-              <span style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);color:var(--muted);font-weight:600">Python</span>
-              <span style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);color:var(--muted);font-weight:600">Flask</span>
-              <span style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);color:var(--muted);font-weight:600">React</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="reveal" style="padding-top:36px;padding-bottom:36px;border-top:1px solid var(--border)">
-      <div style="text-align:center;margin-bottom:12px">
-        <div style="color:var(--accent);font-weight:700;font-size:13px">Get in Touch</div>
-        <h2 style="margin-top:6px">Let's build something</h2>
-        <p style="color:var(--muted);max-width:720px;margin:12px auto">Have a project in mind? Reach out via email and we'll respond within one business day.</p>
-        <a href="mailto:dataaxeinfo@gmail.com" class="btn btn-primary" style="margin-top:8px">Email: dataaxeinfo@gmail.com</a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container footer-inner">
-      <div class="footer-copy">&copy; 2025 Data Axe. All rights reserved.</div>
-      <div class="footer-links">
-        <a href="#services">Services</a>
-        <a href="#testimonials">Reviews</a>
-        <a href="#about">About</a>
-        <a href="mailto:dataaxeinfo@gmail.com">Contact</a>
-      </div>
+				<!-- Banner -->
+					<section id="banner">
+						<div class="inner">
+					<div class="logo" style="border-color: #00d2ff !important;"><span class="icon fa-gem" style="color:#00d2ff !important;"></span></div>
+							<h2>DATA AXE</h2>
+							<p>OSINT, QR SAFETY & WEB DEVELOPMENT</p>
+						</div>
+					</section>
+					<!-- About Section Card -->
+<div class="card" id="about">
+    <div class="card-content">
+        <h2>POWERING SECURE INNOVATION</h2>
+        <p>Data Axe is built on the foundation of smart data and digital defense. From bulletproof QR security to strategic OSINT insights and modern web engineering, we protect and power your digital presence.</p>
     </div>
-  </footer>
+</div>
 
-  <script>
-    // Lightweight particles (kept subtle)
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext && canvas.getContext('2d');
-    if (ctx) {
-      let w=canvas.width=innerWidth, h=canvas.height=innerHeight;
-      addEventListener('resize',()=>{w=canvas.width=innerWidth;h=canvas.height=innerHeight});
-      const pts = [];
-      const cols = [{r:31,g:182,b:255},{r:30,g:150,b:200}];
-      for(let i=0;i<Math.min(80,Math.floor(innerWidth*0.06));i++){
-        pts.push({x:Math.random()*w,y:Math.random()*h,s:Math.random()*1.8+0.3,dx:(Math.random()-0.5)*0.3,dy:Math.random()*0.25+0.03,c:cols[Math.floor(Math.random()*cols.length)],op:Math.random()*0.4+0.08});
+
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+
+						<!-- One -->
+							<section id="one" class="wrapper spotlight style1">
+								<div class="inner">
+<img src="images/pic01.jpg" alt="" style="width: 100%; border-radius: 12px; border: 3px solid #00f7ff; box-shadow: 0 0 15px #00d5ff, inset 0 0 10px #00f7ff;" />
+									<div class="content">
+										<h2 class="major">Building The Future Of Tech</h2>
+										<p>From custom QR systems and web applications to interactive games and OSINT solutions, we craft powerful digital products that solve real problems with reliability, clean architecture, and a user-first approach</p>
+									</div>
+								</div>
+							</section>
+
+						<!-- Two -->
+							<section id="two" class="wrapper alt spotlight style2">
+								<div class="inner">
+										<img src="images/pic02.jpg" alt="" style="width: 100%; border-radius: 12px; border: 3px solid #00f7ff; box-shadow: 0 0 15px #00d5ff, inset 0 0 10px #00f7ff;" />
+										
+									<div class="content">
+										<h2 class="major">Uncovering Digital Footprints - OSINT & SOCMINT</h2>
+										<p>Advanced open-source intelligence (OSINT) and social media analysis (SOCMINT). We track digital footprints, analyze public online profiles, verify identity patterns, and identify cybersecurity risks through deep web reconnaissance and threat monitoring</p>								
+									</div>
+								</div>
+							</section>
+
+						<!-- Three -->
+							<section id="three" class="wrapper spotlight style3">
+								<div class="inner">
+											<img src="images/pic03.jpg" alt="" style="width: 100%; border-radius: 12px; border: 3px solid #00f7ff; box-shadow: 0 0 15px #00d5ff, inset 0 0 10px #00f7ff;" />
+									<div class="content">
+										<h2 class="major">Restaurant QR & Inventory</h2>
+										<p>Digital menus, ordering, and inventory sync - built for speed, reliability, and easy staff workflows.
+Menu & order automation
+Inventory and wastage tracking
+POS & analytics integrations</p>									
+									</div>
+								</div>
+							</section>
+
+						<!-- Four -->
+							<section id="four" class="wrapper alt style1">
+								<div class="inner">
+									<h2 class="major">Professional Services</h2>
+									<p>End-to-end engineering and product design scalable systems, mobile-first apps, and IoT integrations tailored for performance and security.</p>
+									<section class="features">
+										<article>
+										<img src="images/pic08.jpg" alt="" style="width: 100%; border-radius: 12px; border: 3px solid #ffffff; box-shadow: 0 0 15px #ffffff, inset 0 0 5px #ffffff;" />
+											<h3 class="major">EMERGENCY QR & PROFILE SYSTEMS</h3>
+											<p>Fast-access QR profiles featuring instant live location sharing upon scanning, unique serial numbers, blood group data, and encrypted emergency contacts. Instantly triggers direct WhatsApp and emergency alerts to family, 1122, and 15, supported by secure offline-friendly scanners and admin analytics
+</p>										
+										</article>
+										<article>
+											<img src="images/pic05.jpg" alt="" style="width: 100%; border-radius: 12px; border: 3px solid #ffffff; box-shadow: 0 0 15px #ffffff, inset 0 0 5px #ffffff;" />
+											<h3 class="major">Mobile Camera Security</h3>
+											<p>Turn smartphones into smart cameras with motion detection, secure storage, and remote access controls.
+Motion & event recording
+Encrypted cloud retention
+Multi-device management</p>
+										</article>
+										<article>
+													<img src="images/pic03.jpg" alt="" style="width: 100%; border-radius: 12px; border: 3px solid #ffffff; box-shadow: 0 0 15px #ffffff, inset 0 0 5px #ffffff;" />
+											<h3 class="major">2D Web Games & Interactive Experiences</h3>
+											<p>Lightweight, browser-based 2D games optimized for high engagement, quick loading times, and smooth institutional or promotional deployments</p>											
+										</article>
+										<article>
+													<img src="images/pic07.jpg" alt="" style="width: 100%; border-radius: 12px; border: 3px solid #ffffff; box-shadow: 0 0 15px #ffffff, inset 0 0 5px #ffffff;" />
+											<h3 class="major">Staff Attendance & Advance Salary Management</h3>
+											<p>Comprehensive workforce tracking system featuring automated monthly attendance logs, advance salary tracking, and CNIC-verified staff records with instant calculations</p>										
+										</article>
+									</section>
+									</ul>
+								</div>
+							</section>
+
+					</section>
+
+<!-- Footer / FAQ Section -->
+<section id="footer">
+	<div class="inner">
+		<h2 class="major">Frequently Asked Questions</h2>
+		
+		<!-- 5 FAQs -->
+		<div style="text-align: left; margin-bottom: 2em;">
+			<h4 style="color: #fff; margin-bottom: 0.2em;">Q: How do custom QR systems work?</h4>
+			<p style="opacity: 0.8; margin-bottom: 1.2em;">They connect physical QR codes directly to custom web applications or dashboards for instant data access and emergency scanning.</p>
+			
+			<h4 style="color: #fff; margin-bottom: 0.2em;">Q: What is the delivery timeframe for a custom web project?</h4>
+			<p style="opacity: 0.8; margin-bottom: 1.2em;">Most standard web apps, QR management systems, and inventory dashboards are built and delivered within 3 to 7 business days.</p>
+
+			<h4 style="color: #fff; margin-bottom: 0.2em;">Q: Can I request customized features for my business?</h4>
+			<p style="opacity: 0.8; margin-bottom: 1.2em;">Yes, every solution is tailored to your specific workflow—whether it is restaurant ordering, staff attendance, or emergency tracking.</p>
+
+			<h4 style="color: #fff; margin-bottom: 0.2em;">Q: Is there any monthly subscription fee?</h4>
+			<p style="opacity: 0.8; margin-bottom: 1.2em;">We offer flexible pricing options, including one-time project fees with full ownership or ongoing hosting and maintenance plans.</p>
+
+			<h4 style="color: #fff; margin-bottom: 0.2em;">Q: How do I discuss technical requirements before starting?</h4>
+			<p style="opacity: 0.8; margin-bottom: 1.2em;">You can directly reach out to our core engineering team using the developer contact button below to review your project scope.</p>
+			
+			<h4 style="color: #fff; margin-bottom: 0.2em;">Q: What is OSINT & SOCMINT, and how does it protect my digital assets?</h4>
+			<p style="opacity: 0.8; margin-bottom: 1.2em;">OSINT (Open Source Intelligence) and SOCMINT (Social Media Intelligence) analyze publicly available online data to trace digital footprints. We use these methods to uncover security vulnerabilities, identify potential threats, and protect your digital assets before they can be exploited.</p>
+		</div>
+
+		<!-- Animated "Talk to Developer" Button -->
+		<div style="text-align: center; margin-bottom: 2.5em;">
+			<a href="mailto:dataaxeinfo@gmail.com?subject=Technical%20Discussion%20-%20Data%20Axe" class="btn-dev">
+				<span class="btn-text-one">Talk to Developer</span>
+				<span class="btn-text-two">Let's Connect!</span>
+			</a>
+		</div>
+
+		<div class="contact-card">
+  <img class="image" alt="Astronaut" src="https://uiverse.io/astronaut.png" />
+  <div class="heading">CONTACT US</div>
+  
+  <!-- ایڈریس کا ٹیکسٹ جو صاف نظر آئے گا -->
+  <div class="address-text" style="color: #fff; font-size: 13px; margin-bottom: 12px; text-align: center; opacity: 0.9;">
+    📍 Ferozpur Road Lahore, Pakistan
+  </div>
+
+  <div class="icons">
+    <!-- لوکیشن / ہوم آئیکن -->
+    <a class="location" href="https://maps.google.com/?q=Ferozpur+Road+Lahore" target="_blank" title="View on Map">
+      <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <!-- فون آئیکن -->
+    <a class="phone" href="tel:+923036360008" title="Call Us">
+      <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+    </a>
+    <!-- جی میل آئیکن -->
+    <a class="gmail" href="mailto:dataaxeinfo@gmail.com" title="Email Us">
+      <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+    </a>
+  </div>
+</div>
+
+
+
+
+<div class="copyright" style="text-align: center; font-size: 13px; color: #aaa; margin-top: 20px;">
+  <!-- یہ رہا پرائیویسی پالیسی کا لنک -->
+  <p style="margin-bottom: 5px;">
+    <a href="privacy.html" style="color: #00b7ff; text-decoration: none;">Privacy Policy</a>
+  </p>
+  
+  <p style="margin-bottom: 3px;">© 2024–2026 Data Axe. All rights reserved.</p>
+  <p style="font-size: 11px; color: #777;">Securing your digital assets worldwide.</p>
+</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+<script>
+function toggleMenu() {
+  var menu = document.getElementById("dropdown-menu");
+  menu.classList.toggle("show");
+}
+
+window.onclick = function(event) {
+  if (!event.target.matches('.three-dots-btn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
       }
-      let t=0;
-      function frame(){
-        ctx.clearRect(0,0,w,h);
-        t++;
-        pts.forEach(p=>{
-          p.x+=p.dx; p.y+=p.dy;
-          if(p.x<-20||p.x>w+20||p.y<-20||p.y>h+20){p.x=Math.random()*w;p.y=-10}
-          const o = p.op*(0.6+0.4*Math.sin(t*0.01));
-          ctx.fillStyle=`rgba(${p.c.r},${p.c.g},${p.c.b},${o})`;
-          ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fill();
-        });
-        requestAnimationFrame(frame);
-      }
-      frame();
     }
+  }
+}
 
-    // Intersection reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries)=>{entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target)} })},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-    reveals.forEach(r=>io.observe(r));
-  </script>
-</body>
+function showAddress() {
+  const box = document.getElementById('address-box');
+  box.style.display = 'block';
+  
+  setTimeout(function() {
+    box.style.display = 'none';
+  }, 5000);
+}
+</script>
+
 </html>
