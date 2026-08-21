@@ -8,10 +8,25 @@
 		<noscript><link rel="stylesheet" href="static/noscript.css" /></noscript>
 
 <style>
-/* Fallback and fix for banner background images or styling */
+/* Force Dark Background & Fix Missing CSS Fallbacks */
+body, html {
+  background-color: #07182E !important;
+  color: #ffffff !important;
+}
+
+#page-wrapper {
+  background-color: #07182E !important;
+}
+
 #banner {
   background-color: #07182E !important;
   background-image: linear-gradient(135deg, #07182E 0%, #112240 100%) !important;
+  padding: 6em 0;
+  text-align: center;
+}
+
+#banner h2, #banner p {
+  color: #ffffff !important;
 }
 
 .card {
@@ -185,7 +200,7 @@
 			<!-- Banner -->
 			<section id="banner">
 				<div class="inner">
-					<div class="logo" style="border-color: #00d2ff !important;"><span class="icon fa-gem" style="color:#00d2ff !important;"></span></div>
+					<div class="logo" style="border-color: #00d2ff !important;"><span class="icon fa-gem" style="color:#00d2ff !important;">💎</span></div>
 					<h2>DATA AXE</h2>
 					<p>OSINT, QR SAFETY & WEB DEVELOPMENT</p>
 				</div>
